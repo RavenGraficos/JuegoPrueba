@@ -8,6 +8,8 @@ public class Player : MonoBehaviour
     public Light playerLight;
     public bool lightOn = false;
 
+    public GameManager gameManager;
+
     public CharacterController controller;
     public float gravity = -9.81f;
     public float jumpHeight = 0.5f;
@@ -26,6 +28,8 @@ public class Player : MonoBehaviour
         {
             healthBar = GameObject.Find("HealthBarr").GetComponent<HealthBar>();
             staminaBar = GameObject.Find("StaminaBar").GetComponent<StaminaBar>();
+
+            gameManager = FindFirstObjectByType<GameManager>();
 
             playerLight.enabled = lightOn;
             currentHealth = maxHealth;
@@ -114,5 +118,18 @@ public class Player : MonoBehaviour
 
     }
 
+    public void TakeDamage (float damage)
+    {
+        currentHealth -= damage;
+        healthBar.ChangeHealth(currentHealth);
+        if (currentHealth <= 0)
+        {
+            currentHealth = 0;
+            healthBar.ChangeHealth(currentHealth);
+            gameManager.LoseGame();
+        }
+    }
 }
+
+
 
